@@ -1,38 +1,50 @@
 package lc;
+//K个一组翻转链表
 
 public class lc25 {
     public ListNode reverseKGroup(ListNode head, int k) {
         ListNode dummy = new ListNode(0);
         dummy.next = head;
         ListNode pre = dummy;
-        ListNode cur = head;
+        ListNode cur = dummy;
 
-        while(cur != null){
-            for(int i = 0;i<k-1;i++){
+        while (cur != null) {
+            // 检查剩余节点是否足够 k 个
+            for (int i = 0; i < k; i++) {
                 cur = cur.next;
-                if(cur == null){
-                    return dummy.next;
+                if (cur == null) {
+                    return dummy.next; // 剩余节点不足 k 个，直接返回
                 }
             }
-            ListNode tail = cur;
-            ListNode curHead = pre.next;
-            ListNode newHead = cur.next;
-            ListNode[] rev =  reverse(curHead,tail);
-            pre.next = rev[0];
-            rev[1].next = newHead;
-            cur = cur.next;
+
+            // 保存下一段的起始节点
+            ListNode nextNode = cur.next;
+
+            // 反转当前 k 个节点
+            ListNode[] res = reverse(pre.next, cur);
+            ListNode chead = res[0]; // 反转后的头节点
+            ListNode ctail = res[1]; // 反转后的尾节点
+
+            // 连接反转部分和未反转部分
+            pre.next = chead;
+            ctail.next = nextNode;
+
+            // 更新 pre 和 cur 指针
+            pre = ctail;
+            cur = ctail; // 或 cur = nextNode;
         }
+
         return dummy.next;
     }
 
     public static ListNode[] reverse(ListNode head,ListNode tail){
-        ListNode prev = new ListNode();
-        prev.next = head;
-        while(prev.next != tail){
-            ListNode nex = head.next;
-            prev.next = nex;
-            tail.next = head;
-            head = nex;
+        ListNode prev = null;
+        ListNode p = head;
+        while(prev != tail){
+            ListNode nex = p.next;
+            p.next = prev;
+            prev = p;
+            p = nex;
         }
         return new ListNode[]{tail,head};
     }
@@ -47,6 +59,8 @@ public class lc25 {
         head.next.next = new ListNode(3);
         head.next.next.next = new ListNode(4);
         head.next.next.next.next = new ListNode(5);
+//        ListNode[] res = reverse(head,head.next.next.next.next);
+//        printList(res[0]);
 
         // 测试 k = 2
         System.out.println("Test case 1: k = 2");
