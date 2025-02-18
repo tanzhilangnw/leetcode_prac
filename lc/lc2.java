@@ -69,4 +69,76 @@ public class lc2 {
         }
         System.out.println();
     }
+
+    //岛屿数量
+    public static class lc200 {
+        public static void dfs(char[][] grid,int r ,int c) {
+            if(r >= grid.length || r < 0 || c >= grid[0].length || c < 0 || grid[r][c] == '0') return;
+            grid[r][c] = '0';
+            dfs(grid,r+1,c);
+            dfs(grid,r-1,c);
+            dfs(grid,r,c+1);
+            dfs(grid,r,c-1);
+        }
+
+        public static int numIslands(char[][] grid) {
+            int res = 0;
+            for(int i = 0;i < grid.length;i++) {
+                for(int j =0;j < grid[0].length ;j++){
+                    if(grid[i][j] == '1'){
+                        res++;
+                        dfs(grid,i,j);
+                    }
+                }
+            }
+            return res;
+        }
+
+        public static void main(String[] args) {
+            // 测试用例 1：空网格
+            char[][] grid1 = {};
+            System.out.println("Test Case 1: " + lc200.numIslands(grid1)); // 期望输出：0
+
+            // 测试用例 2：全是水的网格
+            char[][] grid2 = {
+                    {'0', '0', '0'},
+                    {'0', '0', '0'},
+                    {'0', '0', '0'}
+            };
+            System.out.println("Test Case 2: " + lc200.numIslands(grid2)); // 期望输出：0
+
+            // 测试用例 3：全是陆地的网格（一个整体岛屿）
+            char[][] grid3 = {
+                    {'1', '1', '1'},
+                    {'1', '1', '1'},
+                    {'1', '1', '1'}
+            };
+            System.out.println("Test Case 3: " + lc200.numIslands(grid3)); // 期望输出：1
+
+            // 测试用例 4：一个小岛屿
+            char[][] grid4 = {
+                    {'0', '0', '0'},
+                    {'0', '1', '0'},
+                    {'0', '0', '0'}
+            };
+            System.out.println("Test Case 4: " + lc200.numIslands(grid4)); // 期望输出：1
+
+            // 测试用例 5：多个不相连的小岛屿
+            char[][] grid5 = {
+                    {'1', '0', '1'},
+                    {'0', '0', '0'},
+                    {'1', '0', '1'}
+            };
+            System.out.println("Test Case 5: " + lc200.numIslands(grid5)); // 期望输出：4
+
+            // 测试用例 6：复杂岛屿分布
+            char[][] grid6 = {
+                    {'1', '1', '0', '0', '0'},
+                    {'1', '1', '0', '0', '0'},
+                    {'0', '0', '1', '0', '0'},
+                    {'0', '0', '0', '1', '1'}
+            };
+            System.out.println("Test Case 6: " + lc200.numIslands(grid6)); // 期望输出：3
+        }
+    }
 }
